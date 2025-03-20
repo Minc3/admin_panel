@@ -75,9 +75,7 @@ async function hashPassword(plainTextPassword: string) {
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(plainTextPassword, salt);
     return hashedPassword;
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 }
 
 async function verifyPassword(
@@ -86,13 +84,6 @@ async function verifyPassword(
 ) {
   try {
     const match = await bcrypt.compare(plainTextPassword, hashedPassword);
-    if (match) {
-      console.log('Password is valid!');
-    } else {
-      console.log('Invalid password.');
-    }
     return match;
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 }

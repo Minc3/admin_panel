@@ -54,9 +54,9 @@ const loginForm = reactive({
 });
 
 const { data: sessionData } = await useFetch('/api/session', {
-  onResponseError: () => {
-    console.log('No active session found');
-  },
+  // onResponseError: () => {
+  //   console.log('No active session found');
+  // },
 });
 
 watchEffect(() => {
@@ -81,17 +81,17 @@ const handleLogin = async () => {
       }),
     });
 
-    const data = await response.json();
+    if (response.status === 429) {
+      throw new Error('Rate limited. Please try again later');
+    }
 
     if (!response.ok) {
-      throw new Error(data.message || 'Authentication failed');
+      throw new Error('Authentication failed');
     }
 
     router.push('/dashboard');
   } catch (error) {
-    console.log(error.message);
-
-    errorMsg.value = error.message || 'Failed to login. Please try again.';
+    errorMsg.value = error.message || 'Failed to login. Please try again';
   } finally {
     isLoading.value = false;
   }
