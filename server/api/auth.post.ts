@@ -28,8 +28,11 @@ export default defineEventHandler(async (event) => {
   const { username, password } = parsedBody.data;
 
   try {
+    const isEmail = username.includes('@');
+    const type = isEmail ? 'email' : 'username';
+
     const user = await executeQuery<any[]>(
-      'SELECT password FROM users WHERE username = ?',
+      `SELECT password FROM users WHERE ${type} = ?`,
       [username]
     );
 
